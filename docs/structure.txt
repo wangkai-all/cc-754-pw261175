@@ -1,0 +1,11 @@
+app.py ──► tracker/server.py ──► tracker/session.py ──► tracker/engine.py
+              (HTTP + JSON)         (scenario+mode+locks,        (gating, cost,
+                                     rebuild from frame 0)       hypotheses, seal,
+                                                                 replay, corrections)
+                                       │                            ├── tracker/kalman.py
+                                       │                            ├── tracker/hungarian.py
+                                       │                            ├── tracker/kbest.py
+                                       │                            └── tracker/linalg.py
+                                       ├── tracker/scenarios.py  (synthetic detections + truth)
+                                       └── tracker/evaluate.py   (IDSW / ghosts / branch recovery)
+web/index.html + style.css + app.js  ──►  fetches /api/sessions/... and draws the canvas

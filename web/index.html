@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数据关联分析台 · 逐帧点迹 → 轨迹</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="mark" aria-hidden="true"></span>
+    <div>
+      <h1>数据关联分析台</h1>
+      <p class="sub">合成点迹 → 轨迹 · 保留歧义的多假设窗口推断</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <label class="field">
+      <span>场景</span>
+      <select id="scenario-select"></select>
+    </label>
+    <div class="segmented" role="group" aria-label="关联模式">
+      <button id="mode-window" class="on" type="button">窗口推断</button>
+      <button id="mode-greedy" type="button">局部贪心</button>
+    </div>
+    <button id="compare-btn" class="ghost" type="button">比较两种模式</button>
+    <button id="export-btn" class="primary" type="button">导出 JSON</button>
+  </div>
+</header>
+
+<main id="app">
+  <section class="stage" aria-label="轨迹画布">
+    <div class="stage-head">
+      <div class="frame-nav">
+        <button id="first-btn" class="icon" type="button" title="第一帧">⏮</button>
+        <button id="prev-btn" class="icon" type="button" title="上一帧">◀</button>
+        <button id="play-btn" class="play" type="button" aria-pressed="false">播放</button>
+        <button id="next-btn" class="icon" type="button" title="下一帧">▶</button>
+        <button id="last-btn" class="icon" type="button" title="最后一帧">⏭</button>
+        <div class="frame-counter"><b id="frame-num">0</b><span>/ <span id="frame-max">0</span></span></div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="canvas" width="760" height="760" aria-label="逐帧点迹与轨迹画布"></canvas>
+      <div id="canvas-empty" class="canvas-empty">选择场景后开始</div>
+    </div>
+    <div class="scrub-wrap">
+      <input id="scrub" type="range" min="0" max="0" value="0" aria-label="帧滑块">
+      <div class="timeline" id="timeline" aria-hidden="true"></div>
+    </div>
+    <div class="stage-foot">
+      <div class="chips" id="status-chips"></div>
+      <p class="hint" id="stage-hint"></p>
+    </div>
+  </section>
+
+  <aside class="sidebar">
+    <nav class="tabs" role="tablist">
+      <button class="tab on" data-tab="branches" role="tab">假设分支</button>
+      <button class="tab" data-tab="detections" role="tab">检测 / 排除原因</button>
+      <button class="tab" data-tab="locks" role="tab">锁定</button>
+      <button class="tab" data-tab="ledger" role="tab">封存与更正</button>
+      <button class="tab" data-tab="metrics" role="tab">评估</button>
+    </nav>
+    <div class="tab-body">
+      <section class="panel on" id="panel-branches"></section>
+      <section class="panel" id="panel-detections"></section>
+      <section class="panel" id="panel-locks"></section>
+      <section class="panel" id="panel-ledger"></section>
+      <section class="panel" id="panel-metrics"></section>
+    </div>
+  </aside>
+</main>
+
+<footer class="foot">
+  <span>所有坐标均为合成的 2D 点迹；不涉及摄像头或图像识别。</span>
+  <span id="foot-note">窗口推断为有限预算搜索，不是全局最优。</span>
+</footer>
+
+<dialog id="compare-dialog" aria-labelledby="compare-title">
+  <div class="dialog-head">
+    <h2 id="compare-title">局部贪心 vs 窗口推断</h2>
+    <button id="compare-close" class="icon" type="button" aria-label="关闭">✕</button>
+  </div>
+  <div id="compare-body" class="dialog-body"></div>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>
